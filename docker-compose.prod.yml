@@ -1,0 +1,18 @@
+version: '3'
+services:
+  web:
+    image: 123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/sample_app_nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - php
+  php:
+    image: 123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/sample_app_php
+    ports:
+      - "9000:9000"
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: /ecs/sample_app_php
+        awslogs-region: ap-northeast-1
+        awslogs-stream-prefix: ecs

@@ -1,0 +1,28 @@
+version: 1
+task_definition:
+  ecs_network_mode: awsvpc
+  task_role_arn: arn:aws:iam::123456789012:role/ecsTask
+  task_execution_role: ecsTaskExecutionRole
+  task_size:
+    cpu_limit: 2048
+    mem_limit: 4096
+  services:
+    sample_app_php:
+      cpu_shares: 2048
+      mem_limit: 3GB
+      mem_reservation: 3GB
+      essential: true
+    sample_app_nginx:
+      mem_limit: 128M
+      mem_reservation: 128M
+
+run_params:
+  network_configuration:
+    awsvpc_configuration:
+      subnets:
+        # private subnet
+        - subnet-xxxxxxxx
+        - subnet-zzzzzzzz
+      security_groups:
+        - sg-yyyyyyyy
+      assign_public_ip: DISABLED
