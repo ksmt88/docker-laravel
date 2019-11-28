@@ -2,7 +2,7 @@ FROM debian:9.11-slim
 
 # util
 RUN apt update \
-    && apt install -y ca-certificates apt-transport-https gnupg2 curl lsb-release
+    && apt install -y ca-certificates apt-transport-https gnupg2 curl lsb-release git unzip
 
 # install php-fpm
 RUN curl -fsSL https://packages.sury.org/php/apt.gpg | apt-key add \
@@ -26,13 +26,17 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && apt install -y unixodbc-dev
 
 # install php ext
-RUN apt install -y php7.3-dev php7.3-xml php7.3-bcmath php7.3-mbstring php7.3-mysql locales \
+RUN apt install -y php7.3-dev php7.3-xml php7.3-bcmath php7.3-mbstring php7.3-mysql php7.3-zip locales \
     && sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen \
     && locale-gen \
     && pecl install sqlsrv pdo_sqlsrv \
     && printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.3/mods-available/sqlsrv.ini \
     && printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.3/mods-available/pdo_sqlsrv.ini \
     && phpenmod -v 7.3 sqlsrv pdo_sqlsrv
+
+# composer
+RUN curl -s https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer
 
 EXPOSE 9000
 CMD ["php-fpm7.3"]
