@@ -9,7 +9,7 @@ jobs:
   laravel-tests:
     runs-on: ubuntu-latest
     steps:
-    - uses: ksmt88/ecs-laravel@v1
+    - uses: ksmt88/ecs-laravel@master
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
