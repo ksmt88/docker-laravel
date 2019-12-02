@@ -4,8 +4,6 @@ services:
     image: 123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/sample_app_nginx
     ports:
       - "80:80"
-    depends_on:
-      - php
   php:
     image: 123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/sample_app_php
     ports:
