@@ -15,5 +15,4 @@
 **.gitignore
 **.gitattributes
 **.sass-cache
-composer.json
 docker-compose.yml
