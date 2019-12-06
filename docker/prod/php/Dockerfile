@@ -43,7 +43,8 @@ COPY . /var/www/html
 
 # setup
 WORKDIR /var/www/html
-RUN php -r "file_exists('.env') || copy('.env.example', '.env');" \
+RUN chown -R www-data:www-data /var/www/html \
+    && php -r "file_exists('.env') || copy('.env.example', '.env');" \
     && composer install \
     && php artisan key:generate
 

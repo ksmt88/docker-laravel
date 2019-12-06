@@ -17,7 +17,7 @@ ecs-cli configure --cluster <クラスター名> --default-launch-type FARGATE -
 ## Service Start
 ```bash
 cd deploy
-ecs-cli compose service up --project-name dev --ecs-profile <Profile> --cluster <ClusterName> --create-log-groups
+ecs-cli compose service up --ecs-profile <Profile> --cluster <ClusterName>
 ```
 
 ### Service Stop
