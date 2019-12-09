@@ -26,6 +26,8 @@
 
 on:
   push:
+    branches:
+      - master
     tags:
       - v*
 
