@@ -10,19 +10,18 @@ php artisan key:generate
 
 ## Credentials
 ```bash
-ecs-cli configure profile --profile-name test_profile --access-key AKIA************** --secret-key ********************************************
-ecs-cli configure --cluster <クラスター名> --default-launch-type FARGATE --region ap-northeast-1 --config-name <config名>
+aws configure
 ```
 
-## Service Start
+## Service Create or Update
 ```bash
 cd deploy
-ecs-cli compose service up --ecs-profile <Profile> --cluster <ClusterName>
+ecs-cli compose service up --aws-profile <ProfileName> --cluster <ClusterName> --launch-type FARGATE --region ap-northeast-1 --target-group-arn <arn> --container-name web --container-port 80　--timeout 10
 ```
 
-### Service Stop
+### Service Delete
 ```bash
-ecs-cli compose service down --ecs-profile <Profile名> --cluster <ClusterName>
+ecs-cli compose service down --aws-profile <ProfileName> --cluster <ClusterName>
 ```
 
 ## Image push
