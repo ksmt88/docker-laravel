@@ -12,7 +12,8 @@ services:
   php:
     build: ./docker/dev/php
     environment:
-      DATABASE_HOST: mysql
+      - DATABASE_HOST=mysql
+      - TZ=Asia/Tokyo
     depends_on:
       - mysql
       - sqlsrv
