@@ -60,19 +60,16 @@ jobs:
         IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./docker/prod/php/Dockerfile .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-    - name: Deploy to Amazon ECS
-      id: deploy-ecs
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
-        TARGET_GROUP_ARN: ${{ secrets.TARGET_GROUP_ARN }}
-      run: |
-        curl -o ./deploy/ecs-cli https://amazon-ecs-cli.s3.amazonaws.com/ecs-cli-linux-amd64-latest
-        chmod +x ./deploy/ecs-cli
-        cd deploy
-        ./ecs-cli configure profile --profile-name deploy --access-key $AWS_ACCESS_KEY_ID --secret-key $AWS_SECRET_ACCESS_KEY
-        ./ecs-cli configure --cluster $CLUSTER_NAME --default-launch-type FARGATE --region ap-northeast-1 --config-name deploy
-        ./ecs-cli compose service up --ecs-profile deploy --cluster $CLUSTER_NAME --target-group-arn $TARGET_GROUP_ARN --container-name web --container-port 80 --timeout 10 --create-log-groups
+#    - name: Deploy to Amazon ECS
+#      id: deploy-ecs
+#      env:
+#        CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
+#        TARGET_GROUP_ARN: ${{ secrets.TARGET_GROUP_ARN }}
+#      run: |
+#        curl -o ./deploy/ecs-cli https://amazon-ecs-cli.s3.amazonaws.com/ecs-cli-linux-amd64-latest
+#        chmod +x ./deploy/ecs-cli
+#        cd deploy
+#        ./ecs-cli configure profile --profile-name deploy --access-key $AWS_ACCESS_KEY_ID --secret-key $AWS_SECRET_ACCESS_KEY
+#        ./ecs-cli configure --cluster $CLUSTER_NAME --default-launch-type FARGATE --region ap-northeast-1 --config-name deploy
+#        ./ecs-cli compose service up --ecs-profile deploy --cluster $CLUSTER_NAME --target-group-arn $TARGET_GROUP_ARN --container-name web --container-port 80 --timeout 10 --create-log-groups
