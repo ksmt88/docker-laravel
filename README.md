@@ -16,7 +16,7 @@ aws configure
 ## Service Create or Update
 ```bash
 cd deploy
-ecs-cli compose service up --aws-profile <ProfileName> --cluster <ClusterName> --launch-type FARGATE --region ap-northeast-1 --target-group-arn <arn> --container-name web --container-port 80　--timeout 10
+ecs-cli compose service up --aws-profile <ProfileName> --cluster <ClusterName> --launch-type FARGATE --region ap-northeast-1 --target-group-arn <arn> --container-name web --container-port 80 --timeout 10 --create-log-groups
 ```
 
 ### Service Delete

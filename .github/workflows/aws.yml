@@ -56,9 +56,18 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPO_NAME }}
-        IMAGE_TAG: ${{ github.sha }}
       run: |
         IMAGE_TAG=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./docker/prod/php/Dockerfile .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+    - name: Deploy to Amazon ECS
+      id: deploy-ecs
+      run: |
+        curl -o /usr/local/bin/ecs-cli https://amazon-ecs-cli.s3.amazonaws.com/ecs-cli-linux-amd64-latest
+        chmod +x /usr/local/bin/ecs-cli
+        cd deploy
+        ecs-cli configure profile --profile-name deploy --access-key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret-key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        ecs-cli configure --cluster ${{ secrets.CLUSTER_NAME }} --default-launch-type FARGATE --region ap-northeast-1 --config-name deploy
+        ecs-cli compose service up --ecs-profile deploy --cluster ${{ secrets.CLUSTER_NAME }} --target-group-arn ${{ secrets.TARGET_GROUP_ARN }} --container-name web --container-port 80 --timeout 10

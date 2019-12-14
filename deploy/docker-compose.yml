@@ -4,6 +4,12 @@ services:
     image: 123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/sample_app_nginx:v1.0.0
     ports:
       - "80:80"
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: /ecs/sample_app_nginx
+        awslogs-region: ap-northeast-1
+        awslogs-stream-prefix: ecs
   php:
     image: 123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/sample_app_php:v1.0.0
     ports:
