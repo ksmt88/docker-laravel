@@ -68,6 +68,4 @@ jobs:
         curl -o ./deploy/ecs-cli https://amazon-ecs-cli.s3.amazonaws.com/ecs-cli-linux-amd64-latest
         chmod +x ./deploy/ecs-cli
         cd deploy
-        ./ecs-cli configure profile --profile-name deploy --access-key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret-key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        ./ecs-cli configure --cluster ${{ secrets.CLUSTER_NAME }} --default-launch-type FARGATE --region ap-northeast-1 --config-name deploy
-        ./ecs-cli compose service up --ecs-profile deploy --cluster ${{ secrets.CLUSTER_NAME }} --target-group-arn ${{ secrets.TARGET_GROUP_ARN }} --container-name web --container-port 80 --timeout 10
+        ./ecs-cli compose service up --aws-profile deploy --cluster ${{ secrets.CLUSTER_NAME }} --launch-type FARGATE --region ap-northeast-1 --target-group-arn ${{ secrets.TARGET_GROUP_ARN }} --container-name web --container-port 80 --timeout 10 --create-log-groups
